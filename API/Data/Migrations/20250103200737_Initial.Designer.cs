@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using api.Data;
+using API.Data;
 
 #nullable disable
 
-namespace api.Data.Migrations
+namespace API.Data.Migrations
 {
     [DbContext(typeof(DefaultDbContext))]
     [Migration("20250103200737_Initial")]

@@ -1,7 +1,7 @@
-﻿using api.Models;
+﻿using API.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace api.Data
+namespace API.Data
 {
     public class DefaultDbContext(DbContextOptions options) : DbContext(options)
     {

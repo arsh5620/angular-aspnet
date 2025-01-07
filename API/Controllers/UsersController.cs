@@ -1,9 +1,10 @@
-﻿using api.Data;
-using api.Models;
+﻿using API.Data;
+using API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace api.Controllers
+namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -15,6 +16,7 @@ namespace api.Controllers
             return Ok(await _context.Users.ToListAsync());
         }
 
+        [Authorize]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<AppUser>> GetUser(int id)
         {
