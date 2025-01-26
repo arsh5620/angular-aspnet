@@ -12,7 +12,6 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 })
 export class NavComponent {
   accountsService = inject(AccountsService)
-  loggedIn:boolean = false;
   collapsed:boolean = true;
 
   model: any = {};
@@ -22,9 +21,12 @@ export class NavComponent {
       .subscribe({
         next: response => {
           this.model = response;
-          this.loggedIn = true;
         },
         error: error => console.log(error)
       });
+  }
+
+  logout(){
+      this.accountsService.logout();
   }
 }

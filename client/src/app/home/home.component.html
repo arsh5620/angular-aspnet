@@ -1,0 +1,24 @@
+<div class="container text-center">
+    <h2>Search your matches</h2>
+    <p class="lead">
+        Come on in and see your matches!
+    </p>
+    <div class="text-center">
+        @if (!registerNow) {
+        <button (click)="toggleRegisterNow()" class="btn btn-primary btn-lg me-2">
+            Register
+        </button>
+        <button (click)="toggleRegisterNow()" class="btn btn-info btn-lg me-2">
+            Login
+        </button>
+        }@else {
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-4">
+                    <app-register [usersFromHomeModel]="users" (cancelForm)="cancelRegistrationForm($event)"></app-register>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
