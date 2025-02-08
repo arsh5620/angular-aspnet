@@ -1,32 +1,45 @@
-﻿using API.Data;
-using API.Models;
+﻿using API.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class UsersController(DefaultDbContext _context) : ControllerBase
+    public class UsersController(UserRepository _repository, IMapper mapper) : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserResponseDto>>> GetUsers()
         {
-            return Ok(await _context.Users.ToListAsync());
+            var users = await _repository.GetAllUsersAsync();
+            var usersToReturn = mapper.Map<IEnumerable<UserResponseDto>>(users);
+            return Ok(usersToReturn);
         }
 
-        [Authorize]
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<AppUser>> GetUser(int id)
+        public async Task<ActionResult<UserResponseDto>> GetUserById(int id)
         {
-            var result = await _context.Users.FindAsync(id);
+            var result = await _repository.GetUserByIdAsync(id);
             if (result is null)
             {
                 return NotFound(string.Empty);
             }
 
-            return result;
+            return mapper.Map<UserResponseDto>(result);
+        }
+
+        [HttpGet("{username}")]
+        public async Task<ActionResult<UserResponseDto>> GetUserByUsername(string username)
+        {
+            var result = await _repository.GetUserByUsernameAsync(username);
+            if (result is null)
+            {
+                return NotFound(string.Empty);
+            }
+
+            return mapper.Map<UserResponseDto>(result);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using API;
 using API.Data;
 using API.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ namespace API
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AccountsController(DefaultDbContext _context, AuthTokenService _tokenService) : ControllerBase
+    public class AccountsController(UserRepository _repository, AuthTokenService _tokenService) : ControllerBase
     {
         [HttpPost("register")]
         public async Task<ActionResult<LoggedInUserDto>> RegisterUser(RegisterUserDto registerUser)
@@ -19,31 +20,31 @@ namespace API
                 return BadRequest("User already exists");
             }
 
-            using var hmac = new HMACSHA512();
+            return Ok();
+            // using var hmac = new HMACSHA512();
 
-            var user = new AppUser()
-            {
-                UserName = registerUser.Username,
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerUser.Password)),
-                PasswordSalt = hmac.Key
-            };
+            // var user = new AppUser()
+            // {
+            //     UserName = registerUser.Username,
+            //     PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerUser.Password)),
+            //     PasswordSalt = hmac.Key
+            // };
 
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+            // await _context.Users.AddAsync(user);
+            // await _context.SaveChangesAsync();
 
-            return new LoggedInUserDto()
-            {
-                Username = registerUser.Username,
-                AuthToken = _tokenService.GenerateToken(user)
-            };
+            // return new LoggedInUserDto()
+            // {
+            //     Username = registerUser.Username,
+            //     AuthToken = _tokenService.GenerateToken(user)
+            // };
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<LoggedInUserDto>> Login(LoginRequestDto loginRequest)
         {
 
-            var user = await _context.Users
-                .SingleOrDefaultAsync(x => x.UserName == loginRequest.Username);
+            var user = await _repository.GetUserByUsernameAsync(loginRequest.Username);
             if (user is null)
             {
                 return Unauthorized("Username incorrect");
@@ -66,7 +67,7 @@ namespace API
 
         async Task<bool> CheckIfUserExists(string userName)
         {
-            return await _context.Users.AnyAsync(x => x.UserName == userName);
+            return await _repository.CheckIfUsernameExistsAsync(userName);
         }
     }
 }
