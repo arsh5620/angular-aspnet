@@ -1,1 +1,20 @@
-<p>member-detail works!</p>
+Name: {{member?.knownAs}}<BR>
+Age: {{member?.age}}
+
+<tabset>
+    <tab heading="Something">
+        <div class="tab-pane mb-4">
+            <div class="card-body">
+                <h5 class="card-title">{{member?.knownAs}}</h5>
+                <p class="card-text text-truncate" style="height: 2em;">{{member?.lookingFor}}</p>
+                <a class="btn btn-primary">Show Profile</a>
+            </div>
+        </div>
+    </tab>
+    <tab heading="Something">
+        This is tab contents
+    </tab>
+    <tab heading="Something">
+        This is tab contents
+    </tab>
+</tabset>

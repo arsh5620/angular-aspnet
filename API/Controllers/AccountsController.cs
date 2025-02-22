@@ -3,6 +3,7 @@ using System.Text;
 using API;
 using API.Data;
 using API.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +11,7 @@ namespace API
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AccountsController(UserRepository _repository, AuthTokenService _tokenService) : ControllerBase
+    public class AccountsController(UserRepository _repository, AuthTokenService _tokenService, IMapper _mapper) : ControllerBase
     {
         [HttpPost("register")]
         public async Task<ActionResult<LoggedInUserDto>> RegisterUser(RegisterUserDto registerUser)
@@ -20,24 +21,28 @@ namespace API
                 return BadRequest("User already exists");
             }
 
-            return Ok();
-            // using var hmac = new HMACSHA512();
+            using var hmac = new HMACSHA512();
 
-            // var user = new AppUser()
-            // {
-            //     UserName = registerUser.Username,
-            //     PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerUser.Password)),
-            //     PasswordSalt = hmac.Key
-            // };
+            var user = new AppUser()
+            {
+                UserName = registerUser.Username,
+                KnownAs = registerUser.Username,
+                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerUser.Password)),
+                PasswordSalt = hmac.Key,
+                Gender = "male",
+                DateOfBirth = DateOnly.FromDateTime(DateTime.UtcNow),
+                Created = DateTime.Now,
+                LastActive = DateTime.UtcNow,
+                City = "some city",
+                Country = "some country"
+            };
 
-            // await _context.Users.AddAsync(user);
-            // await _context.SaveChangesAsync();
-
-            // return new LoggedInUserDto()
-            // {
-            //     Username = registerUser.Username,
-            //     AuthToken = _tokenService.GenerateToken(user)
-            // };
+            await _repository.AddUserAsync(user);
+            return new LoggedInUserDto()
+            {
+                Username = user.UserName,
+                AuthToken = _tokenService.GenerateToken(user)
+            };
         }
 
         [HttpPost("login")]

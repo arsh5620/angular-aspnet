@@ -17,6 +17,7 @@ builder.Services.AddDbContext<DefaultDbContext>(param =>
     param.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnectionSqlite"));
 });
 builder.Services.AddScoped<AuthTokenService>();
+builder.Services.AddScoped<PhotoService>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddAutoMapper((mapperConfig) =>
 {
@@ -73,7 +74,11 @@ class DefaultAutoMapperProfile : Profile
     public DefaultAutoMapperProfile()
     {
         CreateMap<AppUser, UserResponseDto>()
-            .ForMember(d => d.PhotoUrl, o => o.MapFrom(s => s.Photos.FirstOrDefault(x => x.IsMain)!.Url));
-        CreateMap<Photo, PhotoDto>();
+            .ForMember(d => d.PhotoUrl, o => o.MapFrom(s =>
+                    PathUtils.GetBaseUriForPhotos() + s.Photos.FirstOrDefault()!.FileName
+                     ));
+        CreateMap<Photo, PhotoDto>()
+            .ForMember(d => d.Url, o => o.MapFrom(s => PathUtils.GetBaseUriForPhotos() + s.FileName));
+        CreateMap<UpdateUserDto, AppUser>();
     }
 }

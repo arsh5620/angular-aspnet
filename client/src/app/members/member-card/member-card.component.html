@@ -1,0 +1,10 @@
+<div class="card mb-4">
+    <div class="card-wrapper">
+        <img class="card-img-top card-animate" src="{{member().photoUrl}}" alt="{{member().knownAs}}">
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">{{member().knownAs}}</h5>
+        <p class="card-text text-truncate" style="height: 2em;">{{member().lookingFor}}</p>
+        <a routerLink="/members/{{member().userName}}" class="btn btn-primary">Show Profile</a>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+.card-animate:hover {
+    transform: scale(1.2);
+    transition-duration: 500ms;
+    transition-timing-function: ease-out;
+}
+
+.card-animate {
+    transform: scale(1);
+    transition-duration: 200ms;
+    transition-timing-function: ease-out;
+}
+
+.card-wrapper {
+    overflow: hidden;
+}

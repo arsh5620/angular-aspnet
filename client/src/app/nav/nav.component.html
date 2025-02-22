@@ -18,7 +18,7 @@
       <li class="nav-item" ngbDropdown>
         <a class="nav-link" tabindex="0" ngbDropdownToggle id="navbarDropdown" role="button">Welcome {{this.accountsService.currentUser()?.username | titlecase}} </a>
         <div ngbDropdownMenu aria-labelledby="navbarDropdown" class="dropdown-menu-end">
-          <a ngbDropdownItem href="#" (click)="$event.preventDefault()">Settings</a>
+          <a ngbDropdownItem routerLink="/editProfile">Edit Profile</a>
           <a ngbDropdownItem href="#" (click)="this.logout()">Logout</a>
         </div>
       </li>

@@ -6,6 +6,12 @@ namespace API;
 
 public class UserRepository(DefaultDbContext _context)
 {
+    public async Task AddUserAsync(AppUser appUser)
+    {
+        _context.Users.Add(appUser);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<AppUser?> GetUserByIdAsync(int id)
     {
         return await _context.Users
@@ -27,7 +33,7 @@ public class UserRepository(DefaultDbContext _context)
 
     public async Task<List<AppUser>> GetAllUsersAsync()
     {
-        return await _context.Users.ToListAsync();
+        return await _context.Users.Include(x => x.Photos).ToListAsync();
     }
 
     public async Task<bool> SaveAllAsync()

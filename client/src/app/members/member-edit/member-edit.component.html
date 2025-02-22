@@ -1,0 +1,21 @@
+@if (member) {
+<form #defaultForm="ngForm" (ngSubmit)="updateProfile()">
+
+    @if (defaultForm.dirty) {
+    <div class="alert alert-info pb-0">
+        <p><strong>Info:  </strong>You have unsaved changes</p>
+    </div>
+    }
+
+    <div class="mt-4 mb-2">Known As:</div>
+    <input class="text form-control" name="knownAs" [(ngModel)]="member.knownAs">
+    <div class="mt-4 mb-2">Introduction:</div>
+    <textarea class="form-control" name="introduction" [(ngModel)]="member.introduction" rows="4"></textarea>
+    <div class="mt-4 mb-2">Looking For:</div>
+    <textarea class="form-control" name="lookingFor" [(ngModel)]="member.lookingFor" rows="4"></textarea>
+    <div class="mt-4 mb-2">Interests:</div>
+    <textarea class="form-control" name="interests" [(ngModel)]="member.interests" rows="4"></textarea>
+
+    <div class="card-footer"><button type="submit" class="btn btn-success mt-4" [disabled]="!defaultForm.dirty">Save Changes</button></div>
+</form>
+}
